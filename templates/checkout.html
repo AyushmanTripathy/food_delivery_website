@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block body %}
+<h1>Checkout Page</h1>
+
+<p>total is ₹{{ data['orders']|sum(attribute=2) }}</p>
+<ul>
+  {% for id, name, price, cat, count in data['orders'] %}
+  <li>{{count}}x {{ name }}</li>
+  {% endfor %}
+</ul>
+<p> Delivering to {{data['address']}} </p>
+
+<a href="/"> back to home </a>
+<br />
+
+<button onclick="confirmCheckout({{ session['user_id'] }})">
+  Confirm Order
+</button>
+
+<script>
+  async function confirmCheckout(userId) {
+    const res = await fetch("/checkout", {
+      method: "POST",
+      body: userId,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      alert("order placed successfully");
+      return (window.location.href = "/");
+    }
+
+    const body = await res.json();
+    alert(body.msg);
+  }
+</script>
+{% endblock %}

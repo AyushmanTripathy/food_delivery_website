@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% block body %}
+<body>
+  <h1>Logged in as {{ session['user_name'] }}</h1>
+  <a href="/logout"> Logout </a>
+  <h2>Your Order,</h2>
+  <p>total is ₹{{ data['orders']|sum(attribute=2) }}</p>
+  <ul>
+    {% for id, name, price, cat, count in data['orders'] %}
+    <li>
+      {{count}}x {{ name }}
+      <button onclick="cancelOrder({{ id }})">cancel</button>
+    </li>
+    {% endfor %}
+  </ul>
+  <a href="/checkout"> proceed to checkout </a>
+  <h2>Today's Menu</h2>
+  <ul>
+    {% for item in data['items'] %}
+    <li>
+      <p>
+        {{ item[1] }}: ₹{{item[2]}}
+        <button onclick="placeOrder({{ item[0] }})">order</button>
+      </p>
+    </li>
+    {% endfor %}
+  </ul>
+  <script>
+    async function placeOrder(itemId) {
+      const res = await fetch("/order", {
+        method: "POST",
+        body: itemId,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      window.location.reload();
+    }
+    async function cancelOrder(orderId) {
+      const res = await fetch("/order", {
+        method: "DELETE",
+        body: orderId,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      window.location.reload();
+    }
+  </script>
+  {% endblock %}
+</body>

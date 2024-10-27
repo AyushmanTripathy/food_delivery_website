@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Page</title>
+  </head>
+  <body>
+    <p> {{ message }} </p>
+    <form class="login-form" action="{{ url_for('register') }}" method="post">
+      <input name="username" type="text" placeholder="Username" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="address" type="text" placeholder="Address" required />
+      <input type="submit" />
+    </form>
+    <a href="/login"> Login? </a>
+  </body>
+</html>
